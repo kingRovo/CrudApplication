@@ -36,6 +36,7 @@ public class UserServices {
         user.setName(user1.getName());
         user.setCity(user1.getCity());
         userRepo.save(user);
+        //editing user by getter and setter
 
     }
 
