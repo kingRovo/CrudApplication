@@ -1,6 +1,4 @@
 package com.example.crudapplication.services;
-
-
 import com.example.crudapplication.model.User;
 import com.example.crudapplication.user_Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
