@@ -19,9 +19,14 @@ public class UserController {
 private UserServices userServices;
 
 @PostMapping("/add")
-public void addUser(@RequestBody User user){
+public ResponseEntity addUser(@RequestBody(required = true) User user){
 
+    if (user.getName().matches("[a-zA-Z]+")){
     userServices.addNewUser(user);
+    return  new ResponseEntity<>(HttpStatus.CREATED);}
+    else {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 
 @GetMapping("/users")
@@ -32,18 +37,26 @@ public ResponseEntity<List<User>> displayAll(){
     }
     catch(Exception e){
 
-        return  new ResponseEntity(e.getMessage(),HttpStatus.NO_CONTENT);
+        return  new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 
 @GetMapping("/user/{id}")
 public ResponseEntity<Optional<User>> findUser(@PathVariable("id") Integer id){
+
     try{
-        return  new ResponseEntity<>(userServices.displayByID(id),HttpStatus.OK);
+
+        if (userServices.displayByID(id)==null){
+
+            return  new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return  new ResponseEntity(userServices.displayByID(id),HttpStatus.OK);
+
     }
     catch (Exception e){
 
         return  new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
+
     }
 
 }
@@ -53,11 +66,14 @@ public ResponseEntity<Optional<User>> findUser(@PathVariable("id") Integer id){
 public ResponseEntity editUser(@PathVariable("id") Integer id,@RequestBody User user){
 
     try{
+        if(findUser(id)==null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
         userServices.editUser(id,user);
         return  new ResponseEntity(HttpStatus.OK);
     }
     catch (Exception e){
-        return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
     }
 
 }
@@ -66,18 +82,35 @@ public ResponseEntity editUser(@PathVariable("id") Integer id,@RequestBody User 
 public  ResponseEntity deleteUser(@PathVariable("id") Integer id){
 
     try {
+        if(findUser(id)==null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
         userServices.deleteUser(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
     catch (Exception e){
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
 
 
+    @PatchMapping("/updateName/{id}")
+    public ResponseEntity UpdateUserName(@PathVariable("id") Integer id,@RequestBody User user){
 
+        try{
+            if(findUser(id)==null){
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            userServices.updateUserName(id,user);
+            return  new ResponseEntity(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
 
+    }
 
 }
