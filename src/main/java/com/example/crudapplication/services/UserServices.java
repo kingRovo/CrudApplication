@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class UserServices {
@@ -22,9 +22,9 @@ public class UserServices {
         return userRepo.findAll();
     }
 
-    public Optional<User> displayByID(Integer id){
+    public User displayByID(Integer id){
 
-        return userRepo.findById(id);
+        return userRepo.findById(id).orElseThrow();
     }
 
     public void editUser(Integer id ,User user1){

@@ -25,7 +25,7 @@ public ResponseEntity addUser(@RequestBody(required = true) User user){
     userServices.addNewUser(user);
     return  new ResponseEntity<>(HttpStatus.CREATED);}
     else {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
 
@@ -37,7 +37,7 @@ public ResponseEntity<List<User>> displayAll(){
     }
     catch(Exception e){
 
-        return  new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        return  new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
     }
 }
 
@@ -48,7 +48,7 @@ public ResponseEntity<Optional<User>> findUser(@PathVariable("id") Integer id){
 
         if (userServices.displayByID(id)==null){
 
-            return  new ResponseEntity(HttpStatus.NOT_FOUND);
+            return  new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return  new ResponseEntity(userServices.displayByID(id),HttpStatus.OK);
 
@@ -91,7 +91,7 @@ public  ResponseEntity deleteUser(@PathVariable("id") Integer id){
         return new ResponseEntity<>(HttpStatus.OK);
     }
     catch (Exception e){
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }
