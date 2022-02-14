@@ -4,7 +4,11 @@ import com.example.crudapplication.user_Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -13,13 +17,19 @@ public class UserServices {
     @Autowired
     private UserRepo userRepo;
 
-    public  void addNewUser(User user){
+
+
+    public  String addNewUser(User user){
 
         userRepo.save(user);
+
+        return "New User Inserted !";
+
+
     }
 
     public List<User> displayAll(){
-        return userRepo.findAll();
+        return userRepo.findAllUser();
     }
 
     public User displayByID(Integer id){
@@ -27,30 +37,29 @@ public class UserServices {
         return userRepo.findById(id).orElseThrow();
     }
 
-    public void editUser(Integer id ,User user1){
+    public String editUser(Integer id ,User user){
 
 
-        User user = userRepo.findById(id).orElseThrow();
-        user.setName(user1.getName());
-        user.setCity(user1.getCity());
-        userRepo.save(user);
-        //editing user by getter and setter
+       userRepo.editUser(id,user.getName(),user.getCity());
+
+       return  "User update Successfully";
 
     }
 
-    public  void deleteUser(Integer id ){
+    public  String deleteUser(Integer id ){
 
-        User user = userRepo.findById(id).orElseThrow();
-        userRepo.delete(user);
+        userRepo.deleteUser(id);
+
+        return "User Deleted";
     }
 
-    public void updateUserName(Integer id ,User user){
+    public String updateUserName(Integer id ,User user){
 
 
-        User user1 = userRepo.findById(id).orElseThrow();
-        user1.setName(user.getName());
-        userRepo.save(user1);
+        userRepo.editName(id,user.getName());
 
 
+        return "User name updated";
     }
+
 }
