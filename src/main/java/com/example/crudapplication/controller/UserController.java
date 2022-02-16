@@ -22,7 +22,7 @@ private UserServices userServices;
 public ResponseEntity<String> addUser(@RequestBody(required = true) User user){
 
     try{
-    if (user.getName().matches("[a-zA-Z]+")){
+    if (user.getName().matches("[a-zA-Z]+")&&user!=null){
 
     return  new ResponseEntity<>(userServices.addNewUser(user),HttpStatus.CREATED);}
     else {
@@ -54,14 +54,14 @@ public ResponseEntity<Optional<User>> findUser(@PathVariable("id") Integer id){
 
         if (userServices.displayByID(id)==null){
 
-            return  new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return  new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return  new ResponseEntity(userServices.displayByID(id),HttpStatus.OK);
 
     }
     catch (Exception e){
 
-        return  new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
+        return  new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
 
     }
 
@@ -79,7 +79,7 @@ public ResponseEntity<String> editUser(@PathVariable("id") Integer id,@RequestBo
         return  new ResponseEntity(userServices.editUser(id,user),HttpStatus.OK);
     }
     catch (Exception e){
-        return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
+        return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
 }
@@ -114,7 +114,7 @@ public  ResponseEntity<String> deleteUser(@PathVariable("id") Integer id){
             return  new ResponseEntity(userServices.updateUserName(id,user),HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
 
     }
