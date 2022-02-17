@@ -11,22 +11,26 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/users")
 public class UserController {
 
 
-@Autowired
 private UserServices userServices;
 
-@PostMapping("/add")
-public ResponseEntity<String> addUser(@RequestBody(required = true) User user){
+    @Autowired
+    UserController(UserServices userServices){
+        this.userServices = userServices;
+    }
+
+@PostMapping("/")
+public ResponseEntity<?> addUser(@RequestBody(required = true) User user){
 
     try{
-    if (user.getName().matches("[a-zA-Z]+")&&user!=null){
+    if (user.getName().matches("[a-zA-Z]+")&& user!=null){
 
     return  new ResponseEntity<>(userServices.addNewUser(user),HttpStatus.CREATED);}
     else {
-        return new ResponseEntity<>("invalid name",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }}
     catch (Exception e){
 
@@ -35,7 +39,7 @@ public ResponseEntity<String> addUser(@RequestBody(required = true) User user){
     }
 }
 
-@GetMapping("/users")
+@GetMapping("/")
 public ResponseEntity<List<User>> displayAll(){
 
     try{
@@ -47,7 +51,7 @@ public ResponseEntity<List<User>> displayAll(){
     }
 }
 
-@GetMapping("/user/{id}")
+@GetMapping("/{id}")
 public ResponseEntity<Optional<User>> findUser(@PathVariable("id") Integer id){
 
     try{
@@ -68,12 +72,12 @@ public ResponseEntity<Optional<User>> findUser(@PathVariable("id") Integer id){
 }
 
 
-@PutMapping("/edit/{id}")
-public ResponseEntity<String> editUser(@PathVariable("id") Integer id,@RequestBody User user){
+@PutMapping("/{id}")
+public ResponseEntity<?> editUser(@PathVariable("id") Integer id,@RequestBody User user){
 
     try{
         if(userServices.displayByID(id)==null){
-            return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
         return  new ResponseEntity(userServices.editUser(id,user),HttpStatus.OK);
@@ -84,12 +88,12 @@ public ResponseEntity<String> editUser(@PathVariable("id") Integer id,@RequestBo
 
 }
 
-@DeleteMapping("delete/{id}")
+@DeleteMapping("/{id}")
 public  ResponseEntity<String> deleteUser(@PathVariable("id") Integer id){
 
     try {
         if(userServices.displayByID(id)==null){
-            return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
 
@@ -103,12 +107,12 @@ public  ResponseEntity<String> deleteUser(@PathVariable("id") Integer id){
 }
 
 
-    @PatchMapping("/updateName/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity UpdateUserName(@PathVariable("id") Integer id,@RequestBody User user){
 
         try{
             if(userServices.displayByID(id)==null){
-                return new ResponseEntity("User not found",HttpStatus.NOT_FOUND);
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
 
             return  new ResponseEntity(userServices.updateUserName(id,user),HttpStatus.OK);
