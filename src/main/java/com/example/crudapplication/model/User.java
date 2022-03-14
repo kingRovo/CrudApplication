@@ -1,6 +1,8 @@
 package com.example.crudapplication.model;
 
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private  String name;
+    private String name;
     private String city;
 
     public User(Integer id, String name, String city) {
@@ -22,7 +24,7 @@ public class User {
         this.city = city;
     }
 
-    User(){
+    public User() {
 
     }
 
@@ -48,5 +50,10 @@ public class User {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Object thenThrow(IllegalStateException e) {
+
+        return new Exception();
     }
 }

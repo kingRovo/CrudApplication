@@ -11,13 +11,11 @@ import java.util.List;
 
 
 @Repository
-public interface UserRepo extends JpaRepository<User,Integer> {
-
+public interface UserRepo extends JpaRepository<User, Integer> {
 
 
     @Query(value = "select user from User user")
-    public List<User>  findAllUser();
-
+    public List<User> findAllUser();
 
 
     @Query(value = "Select  user from User user where user.id =  ?1")
@@ -31,14 +29,12 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     @Modifying
     @Transactional
     @Query(value = "update User user set user.name = ?2,user.city = ?3  where user.id = ?1")
-    public void editUser(Integer id,String name, String city);
+    public void editUser(Integer id, String name, String city);
 
     @Modifying
     @Transactional
     @Query(value = "update User user set user.name = ?2 where user.id = ?1")
-    public void editName(Integer id,String name);
-
-
+    public void editName(Integer id, String name);
 
 
 }
